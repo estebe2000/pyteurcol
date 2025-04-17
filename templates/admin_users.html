@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Gestion des utilisateurs</h1>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for category, message in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<h2>Ajouter un utilisateur</h2>
+<form method="post" action="{{ url_for('admin.add_user') }}">
+  <label>Nom d'utilisateur:</label><br>
+  <input type="text" name="username" required><br>
+
+  <label>Email:</label><br>
+  <input type="email" name="email" required><br>
+
+  <label>Mot de passe:</label><br>
+  <input type="password" name="password" required><br>
+
+  <label>Rôle:</label><br>
+  <select name="role" required>
+    <option value="admin">Admin</option>
+    <option value="prof">Prof</option>
+    <option value="etudiant" selected>Étudiant</option>
+  </select><br><br>
+
+  <button type="submit">Ajouter</button>
+</form>
+
+<h2>Liste des utilisateurs</h2>
+<table border="1" cellpadding="5" cellspacing="0">
+  <tr>
+    <th>ID</th>
+    <th>Nom d'utilisateur</th>
+    <th>Email</th>
+    <th>Rôle</th>
+    <th>Actions</th>
+  </tr>
+  {% for user in users %}
+  <tr>
+    <td>{{ user.id }}</td>
+    <td>{{ user.username }}</td>
+    <td>{{ user.email }}</td>
+    <td>{{ user.role }}</td>
+    <td>
+      <form method="post" action="{{ url_for('admin.delete_user', user_id=user.id) }}" onsubmit="return confirm('Confirmer la suppression ?');">
+        <button type="submit">Supprimer</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4 text-center">Apprendre Python 🐍</h1>
+
+    <!-- Partie Découverte -->
+    <h2 class="mb-3">Découvrir Python</h2>
+    <p class="lead mb-4">Apprends la programmation Python étape par étape, avec des explications simples et des exemples amusants !</p>
+
+    {% set themes = [
+        ("Afficher des messages avec print", "Pour afficher un message à l'écran, on utilise la fonction <code>print()</code>. C'est comme parler à l'ordinateur ! 💬"),
+        ("Garder des informations Variables", "Les variables servent à stocker des infos (comme ton prénom, ton score...). C'est comme une boîte où tu ranges quelque chose. 📦"),
+        ("Faire des calculs simples Opérateurs", "Avec Python, tu peux faire des calculs : + pour additionner, - pour soustraire, * pour multiplier, / pour diviser. 🧮"),
+        ("Demander à l utilisateur avec input", "Pour demander quelque chose à l'utilisateur, on utilise <code>input()</code>. C'est comme poser une question. ❓"),
+        ("Prendre des décisions if else", "Avec <code>if</code> et <code>else</code>, ton programme peut choisir quoi faire selon la situation. C'est comme un feu rouge ou vert. 🚦"),
+        ("Répéter des actions for loop avec range", "Pour répéter plusieurs fois une action, on utilise une boucle <code>for</code>. C'est comme une chanson en boucle ! 🔁"),
+        ("Ranger plusieurs choses Listes bases", "Les listes permettent de ranger plusieurs infos dans un seul endroit (comme une liste de courses). 📝")
+    ] %}
+
+    <div class="row row-cols-1 row-cols-md-2 g-4 mb-5">
+        {% for titre, explication in themes %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">{{ titre }}</h5>
+                </div>
+                <div class="card-body">
+                    <p>{{ explication|safe }}</p>
+                    <hr>
+                    <p><strong>Exemple :</strong></p>
+                    {% if "print" in titre %}
+                    <pre><code class="language-python">print("Bonjour tout le monde!")</code></pre>
+                    {% elif "Variables" in titre %}
+                    <pre><code class="language-python">prenom = "Alex"
+score = 10
+print(prenom)
+print(score)</code></pre>
+                    {% elif "Opérateurs" in titre %}
+                    <pre><code class="language-python">a = 5 + 3
+b = 10 - 2
+c = 4 * 2
+d = 8 / 2
+print(a, b, c, d)</code></pre>
+                    {% elif "input" in titre %}
+                    <pre><code class="language-python">nom = input("Quel est ton nom ? ")
+print("Salut", nom)</code></pre>
+                    {% elif "if else" in titre %}
+                    <pre><code class="language-python">age = 15
+if age >= 18:
+    print("Majeur")
+else:
+    print("Mineur")</code></pre>
+                    {% elif "for loop" in titre %}
+                    <pre><code class="language-python">for i in range(5):
+    print("Coucou", i)</code></pre>
+                    {% elif "Listes" in titre %}
+                    <pre><code class="language-python">fruits = ["pomme", "banane", "cerise"]
+for fruit in fruits:
+    print(fruit)</code></pre>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Partie Cours -->
+    <h2 class="mb-3">Bibliothèque de Cours</h2>
+    {% if documents %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for document in documents %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="card-title text-truncate mb-0" title="{{ document.nom_fichier }}">
+                        <i class="bi bi-file-earmark-text me-2"></i>{{ document.nom_fichier }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if document.description %}
+                    <p class="card-text">{{ document.description }}</p>
+                    {% else %}
+                    <p class="card-text text-muted fst-italic">Aucune description</p>
+                    {% endif %}
+                    
+                    <div class="mb-2">
+                        {% for tag in document.tags %}
+                        <span class="badge bg-info">{{ tag.nom }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">{{ document.date_upload.strftime('%d/%m/%Y') }}</small>
+                        <small class="text-muted">{{ (document.taille_fichier / 1024)|round(1) }} KB</small>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-top-0">
+                    <a href="{{ url_for('view_document', document_id=document.id) }}" class="btn btn-primary w-100" target="_blank">
+                        <i class="bi bi-book"></i> Consulter
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> Aucun document trouvé.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

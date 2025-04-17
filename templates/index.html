@@ -1,0 +1,565 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<!-- Panneau de sélection (bandeau en haut sur toute la largeur) -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Sélection de l'exercice</h5>
+                {% if ai_provider == 'gemini' %}
+                    <span class="badge bg-info">Gemini</span>
+                {% elif ai_provider == 'mistral' %}
+                    <span class="badge bg-warning">Mistral</span>
+                {% else %}
+                    <span class="badge bg-secondary">LocalAI</span>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <form id="exercise-form" class="row g-3">
+<div class="col-md-3">
+                        <input type="hidden" id="niveau" value="Troisième">
+                    </div>
+                    
+                    <div class="col-md-4">
+<label for="theme" class="form-label">Thème</label>
+                        <select class="form-select" id="theme" required>
+                            <option value="" selected disabled>Choisir un thème</option>
+                            {% for item in data['Troisième'] %}
+                            <option value="{{ item['thème'] }}">{{ item['thème'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+<div class="col-md-3">
+                        <label class="form-label">Difficulté</label>
+                        <div id="difficulty-stars" class="mb-2">
+                            {% for i in range(1,6) %}
+                            <i class="bi bi-star-fill star-icon" data-value="{{ i }}"></i>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" id="difficulte" name="difficulte" value="3" required>
+                    </div>
+                    
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100" id="generate-btn">Lance ton défi 🚀</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Panneau d'énoncé (sur toute la largeur) -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Énoncé de l'exercice</h5>
+            </div>
+            <div class="card-body">
+                <div id="exercise-content" class="d-none">
+                    <div id="exercise-text" class="mb-4"></div>
+                    <div class="text-end">
+                        <div class="btn-group">
+                            <button id="copy-skeleton-btn" class="btn btn-outline-primary">
+                                <i class="bi bi-clipboard"></i> Copier le squelette vers l'éditeur
+                            </button>
+                            <form action="{{ url_for('prepare_notebook') }}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-outline-success ms-2">
+                                    <i class="bi bi-file-earmark-code"></i> Télécharger en Jupyter Notebook
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div id="loading-exercise" class="d-none text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                    <p class="mt-2">Génération de l'énoncé en cours...</p>
+                </div>
+                <div id="no-exercise" class="text-center">
+                    <p class="text-muted">Sélectionnez un niveau, un thème et une difficulté, puis cliquez sur "Générer l'exercice" pour commencer.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Éditeur de code et évaluation sur deux colonnes -->
+<div class="row">
+    <!-- Éditeur de code (colonne gauche) -->
+    <div class="col-md-6">
+        <div class="card mb-4 d-none" id="code-editor-card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Éditeur de code</h5>
+            </div>
+            <div class="card-body">
+                <textarea id="code-editor" class="form-control" rows="15"></textarea>
+                <div class="d-flex justify-content-between mt-3">
+                    <button class="btn btn-primary" id="run-code-btn">Exécuter le code</button>
+                    <button class="btn btn-success" id="evaluate-code-btn">Évaluer le code</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Résultat de l'exécution -->
+        <div class="card mb-4 d-none" id="execution-result-card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Résultat de l'exécution</h5>
+            </div>
+            <div class="card-body">
+                <pre id="execution-output" class="bg-dark text-light p-3 rounded"></pre>
+            </div>
+        </div>
+    </div>
+    
+<!-- Évaluation du code (colonne droite) -->
+    <div class="col-md-6">
+        <div class="card mb-4 d-none" id="evaluation-card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Évaluation du code</h5>
+            </div>
+            <div class="card-body">
+                <div id="evaluation-content"></div>
+                <div id="loading-evaluation" class="d-none text-center">
+                    <div class="spinner-border text-info" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                    <p class="mt-2">Évaluation du code en cours...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Boîte de dialogue pour input() -->
+<div class="modal fade" id="inputModal" tabindex="-1" aria-labelledby="inputModalLabel" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="inputModalLabel">Entrée requise</h5>
+      </div>
+      <div class="modal-body">
+        <p id="input-prompt">Veuillez entrer une valeur :</p>
+        <div class="input-group">
+          <input type="text" class="form-control" id="input-value" placeholder="Votre réponse">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="submit-input">Soumettre</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Données des exercices
+    const exerciseData = JSON.parse('{{ data|tojson|safe }}');
+    
+    // Éléments du DOM
+    const niveauSelect = document.getElementById('niveau');
+    const themeSelect = document.getElementById('theme');
+    const difficulteSelect = document.getElementById('difficulte');
+    const generateBtn = document.getElementById('generate-btn');
+    const exerciseForm = document.getElementById('exercise-form');
+    const exerciseContent = document.getElementById('exercise-content');
+    const exerciseText = document.getElementById('exercise-text');
+    const loadingExercise = document.getElementById('loading-exercise');
+    const noExercise = document.getElementById('no-exercise');
+    const codeEditorCard = document.getElementById('code-editor-card');
+    const runCodeBtn = document.getElementById('run-code-btn');
+    const runWithInputBtn = document.getElementById('run-with-input-btn');
+    const evaluateCodeBtn = document.getElementById('evaluate-code-btn');
+    const executionResultCard = document.getElementById('execution-result-card');
+    const executionOutput = document.getElementById('execution-output');
+    const evaluationCard = document.getElementById('evaluation-card');
+    const evaluationContent = document.getElementById('evaluation-content');
+    const loadingEvaluation = document.getElementById('loading-evaluation');
+    const copySkeletonBtn = document.getElementById('copy-skeleton-btn');
+    const inputModal = new bootstrap.Modal(document.getElementById('inputModal'));
+    const inputPrompt = document.getElementById('input-prompt');
+    const inputValue = document.getElementById('input-value');
+    const submitInputBtn = document.getElementById('submit-input');
+    
+    // Initialiser CodeMirror
+    let codeEditor;
+    document.addEventListener('DOMContentLoaded', function() {
+        codeEditor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+            mode: 'python',
+            theme: 'monokai',
+            lineNumbers: true,
+            indentUnit: 4,
+            tabSize: 4,
+            indentWithTabs: false,
+            lineWrapping: true,
+            autofocus: true
+        });
+    });
+    
+    // Événements de sélection
+    niveauSelect.addEventListener('change', function() {
+        const niveau = this.value;
+        
+        // Réinitialiser les autres sélections
+        themeSelect.innerHTML = '<option value="" selected disabled>Choisir un thème</option>';
+        difficulteSelect.innerHTML = '<option value="" selected disabled>Choisir un niveau de difficulté</option>';
+        difficulteSelect.disabled = true;
+        generateBtn.disabled = true;
+        
+        // Remplir les thèmes disponibles
+        if (niveau && exerciseData[niveau]) {
+            themeSelect.disabled = false;
+            exerciseData[niveau].forEach(theme => {
+                const option = document.createElement('option');
+                option.value = theme.thème;
+                option.textContent = theme.thème;
+                themeSelect.appendChild(option);
+            });
+        } else {
+            themeSelect.disabled = true;
+        }
+    });
+    
+    themeSelect.addEventListener('change', function() {
+        const theme = this.value;
+        if (theme) {
+            generateBtn.disabled = false;
+        } else {
+            generateBtn.disabled = true;
+        }
+    });
+    
+    // Génération de l'exercice
+    exerciseForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const niveau = niveauSelect.value;
+        const theme = themeSelect.value;
+        const difficulte = parseInt(difficulteSelect.value);
+        
+        if (!niveau || !theme || !difficulte) {
+            alert('Veuillez sélectionner tous les champs');
+            return;
+        }
+        
+        // Afficher le chargement
+        noExercise.classList.add('d-none');
+        exerciseContent.classList.add('d-none');
+        loadingExercise.classList.remove('d-none');
+        codeEditorCard.classList.add('d-none');
+        executionResultCard.classList.add('d-none');
+        evaluationCard.classList.add('d-none');
+        
+        // Appel à l'API pour générer l'exercice
+        fetch('/generate-exercise', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                niveau: niveau,
+                theme: theme,
+                difficulte: difficulte
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Masquer le chargement
+            loadingExercise.classList.add('d-none');
+            
+            // Afficher l'énoncé
+            exerciseContent.classList.remove('d-none');
+            exerciseText.innerHTML = formatExerciseText(data.enonce);
+            
+            // Afficher l'éditeur de code
+            codeEditorCard.classList.remove('d-none');
+            
+            // Réinitialiser l'éditeur de code
+            codeEditor.setValue('# Écrivez votre code ici\n\n');
+            
+            // Stocker l'énoncé pour l'évaluation
+            codeEditorCard.dataset.enonce = data.enonce;
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            loadingExercise.classList.add('d-none');
+            alert('Une erreur est survenue lors de la génération de l\'exercice.');
+        });
+    });
+    
+    // Variables pour l'exécution asynchrone
+    let currentExecutionId = null;
+    let executionInterval = null;
+
+    // Fonction pour détecter si le code contient des appels à input()
+    function containsInputCall(code) {
+        // Recherche de "input(" dans le code, en ignorant les commentaires
+        const lines = code.split('\n');
+        for (const line of lines) {
+            const trimmedLine = line.trim();
+            // Ignorer les lignes vides et les commentaires
+            if (trimmedLine === '' || trimmedLine.startsWith('#')) {
+                continue;
+            }
+            // Vérifier si la ligne contient un appel à input()
+            if (trimmedLine.includes('input(')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Exécution du code (détecte automatiquement si input() est utilisé)
+    runCodeBtn.addEventListener('click', function() {
+        const code = codeEditor.getValue();
+        
+        if (!code.trim()) {
+            alert('Veuillez écrire du code avant de l\'exécuter');
+            return;
+        }
+        
+        // Afficher le résultat
+        executionResultCard.classList.remove('d-none');
+        executionOutput.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Exécution en cours...</p></div>';
+        
+        // Détecter si le code contient des appels à input()
+        if (containsInputCall(code)) {
+            // Mode asynchrone avec support de input()
+            fetch('/start-execution', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    code: code
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                currentExecutionId = data.execution_id;
+                
+                // Démarrer la vérification périodique de l'état
+                executionInterval = setInterval(checkExecutionStatus, 500);
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                executionOutput.innerHTML = '<span class="text-danger">Erreur lors du démarrage de l\'exécution.</span>';
+            });
+        } else {
+            // Mode synchrone standard (sans support de input())
+            fetch('/execute-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    code: code
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Afficher le résultat
+                if (data.error) {
+                    executionOutput.innerHTML = `<span class="text-danger">${escapeHtml(data.error)}</span>`;
+                } else {
+                    executionOutput.innerHTML = escapeHtml(data.output) || '<span class="text-muted">Aucune sortie</span>';
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                executionOutput.innerHTML = '<span class="text-danger">Une erreur est survenue lors de l\'exécution du code.</span>';
+            });
+        }
+    });
+    
+    // Fonction pour vérifier l'état de l'exécution
+    function checkExecutionStatus() {
+        if (!currentExecutionId) return;
+        
+        fetch(`/execution-status/${currentExecutionId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Si l'exécution attend une entrée
+                if (data.input_required) {
+                    clearInterval(executionInterval);
+                    
+                    // Afficher la boîte de dialogue d'entrée
+                    inputPrompt.textContent = data.input_prompt || 'Veuillez entrer une valeur :';
+                    inputValue.value = '';
+                    inputModal.show();
+                    
+                    // Focus sur le champ d'entrée
+                    setTimeout(() => {
+                        inputValue.focus();
+                    }, 500);
+                }
+                // Si l'exécution est terminée
+                else if (data.status === 'completed' || data.status === 'error') {
+                    clearInterval(executionInterval);
+                    currentExecutionId = null;
+                    
+                    // Afficher le résultat
+                    if (data.result.error) {
+                        executionOutput.innerHTML = `<span class="text-danger">${escapeHtml(data.result.error)}</span>`;
+                    } else {
+                        executionOutput.innerHTML = escapeHtml(data.result.output) || '<span class="text-muted">Aucune sortie</span>';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                clearInterval(executionInterval);
+                currentExecutionId = null;
+                executionOutput.innerHTML = '<span class="text-danger">Erreur lors de la vérification de l\'état de l\'exécution.</span>';
+            });
+    }
+    
+    // Gestionnaire d'événement pour la soumission d'entrée
+    submitInputBtn.addEventListener('click', function() {
+        submitInput();
+    });
+    
+    // Gestionnaire d'événement pour la touche Entrée dans le champ d'entrée
+    inputValue.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            submitInput();
+        }
+    });
+    
+    // Fonction pour soumettre l'entrée
+    function submitInput() {
+        const value = inputValue.value;
+        
+        // Cacher la boîte de dialogue
+        inputModal.hide();
+        
+        // Envoyer la valeur au serveur
+        fetch(`/provide-input/${currentExecutionId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                input: value
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Reprendre la vérification périodique
+            executionInterval = setInterval(checkExecutionStatus, 500);
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            executionOutput.innerHTML = '<span class="text-danger">Erreur lors de la soumission de l\'entrée.</span>';
+        });
+    }
+    
+    // Évaluation du code
+    evaluateCodeBtn.addEventListener('click', function() {
+        const code = codeEditor.getValue();
+        const enonce = codeEditorCard.dataset.enonce;
+        
+        if (!code.trim()) {
+            alert('Veuillez écrire du code avant de l\'évaluer');
+            return;
+        }
+        
+        // Afficher le chargement
+        evaluationCard.classList.remove('d-none');
+        evaluationContent.classList.add('d-none');
+        loadingEvaluation.classList.remove('d-none');
+        
+        // Appel à l'API pour évaluer le code
+        fetch('/evaluate-code', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                code: code,
+                enonce: enonce
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Masquer le chargement
+            loadingEvaluation.classList.add('d-none');
+            
+            // Afficher l'évaluation
+            evaluationContent.classList.remove('d-none');
+            evaluationContent.innerHTML = formatEvaluationText(data.evaluation);
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            loadingEvaluation.classList.add('d-none');
+            alert('Une erreur est survenue lors de l\'évaluation du code.');
+        });
+    });
+    
+    // Copier le squelette de code vers l'éditeur
+    copySkeletonBtn.addEventListener('click', function() {
+        // Trouver le bloc de code dans l'énoncé
+        const codeBlocks = exerciseText.querySelectorAll('pre code.language-python');
+        
+        if (codeBlocks.length > 0) {
+            // Prendre le premier bloc de code Python trouvé
+            const skeletonCode = codeBlocks[0].textContent;
+            
+            // Mettre le code dans l'éditeur
+            codeEditor.setValue(skeletonCode);
+            
+            // Notification de succès
+            alert('Le squelette de code a été copié dans l\'éditeur !');
+        } else {
+            alert('Aucun squelette de code n\'a été trouvé dans l\'énoncé.');
+        }
+    });
+    
+    // Fonctions utilitaires
+    function formatExerciseText(text) {
+        // Le texte est déjà en HTML, nous le retournons tel quel
+        return text;
+    }
+    
+    function formatEvaluationText(text) {
+        // Le texte est déjà en HTML, nous le retournons tel quel
+        return text;
+    }
+    
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    // Gestion des étoiles de difficulté
+    const stars = document.querySelectorAll('#difficulty-stars .star-icon');
+    const difficulteInput = document.getElementById('difficulte');
+
+    stars.forEach(star => {
+        star.addEventListener('mouseenter', () => {
+            const val = parseInt(star.dataset.value);
+            stars.forEach(s => {
+                s.classList.toggle('hovered', parseInt(s.dataset.value) <= val);
+            });
+        });
+
+        star.addEventListener('mouseleave', () => {
+            stars.forEach(s => s.classList.remove('hovered'));
+        });
+
+        star.addEventListener('click', () => {
+            const val = parseInt(star.dataset.value);
+            difficulteInput.value = val;
+            stars.forEach(s => {
+                s.classList.toggle('selected', parseInt(s.dataset.value) <= val);
+            });
+        });
+    });
+
+</script>
+{% endblock %}

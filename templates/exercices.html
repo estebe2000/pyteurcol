@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Exercices Python</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Sélectionnez un niveau et un thème</h5>
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('generate_exercise') }}" method="post">
+                <div class="row">
+<div class="col-md-6 mb-3">
+                        <input type="hidden" name="niveau" value="Troisième">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="theme" class="form-label">Thème</label>
+                        <select class="form-select" id="theme" name="theme" required>
+                            <option value="">Choisir un thème...</option>
+                            {% if themes %}
+                                {% for theme in themes %}
+                                <option value="{{ theme }}">{{ theme }}</option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="difficulte" class="form-label">Niveau de difficulté (1-5)</label>
+                        <input type="number" class="form-control" id="difficulte" name="difficulte" min="1" max="5" value="3" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-magic"></i> Générer l'exercice
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

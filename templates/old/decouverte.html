@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4 text-center">Découvrir Python 🐍</h1>
+    <p class="lead text-center mb-5">Apprends la programmation Python étape par étape, avec des explications simples et des exemples amusants !</p>
+
+    {% set themes = [
+        ("Afficher des messages avec print", "Pour afficher un message à l'écran, on utilise la fonction <code>print()</code>. C'est comme parler à l'ordinateur ! 💬"),
+        ("Garder des informations Variables", "Les variables servent à stocker des infos (comme ton prénom, ton score...). C'est comme une boîte où tu ranges quelque chose. 📦"),
+        ("Faire des calculs simples Opérateurs", "Avec Python, tu peux faire des calculs : + pour additionner, - pour soustraire, * pour multiplier, / pour diviser. 🧮"),
+        ("Demander à l utilisateur avec input", "Pour demander quelque chose à l'utilisateur, on utilise <code>input()</code>. C'est comme poser une question. ❓"),
+        ("Prendre des décisions if else", "Avec <code>if</code> et <code>else</code>, ton programme peut choisir quoi faire selon la situation. C'est comme un feu rouge ou vert. 🚦"),
+        ("Répéter des actions for loop avec range", "Pour répéter plusieurs fois une action, on utilise une boucle <code>for</code>. C'est comme une chanson en boucle ! 🔁"),
+        ("Ranger plusieurs choses Listes bases", "Les listes permettent de ranger plusieurs infos dans un seul endroit (comme une liste de courses). 📝")
+    ] %}
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for titre, explication in themes %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">{{ titre }}</h5>
+                </div>
+                <div class="card-body">
+                    <p>{{ explication|safe }}</p>
+                    <hr>
+                    <p><strong>Exemple :</strong></p>
+                    {% if "print" in titre %}
+                    <pre><code class="language-python">print("Bonjour tout le monde!")</code></pre>
+                    {% elif "Variables" in titre %}
+                    <pre><code class="language-python">prenom = "Alex"
+score = 10
+print(prenom)
+print(score)</code></pre>
+                    {% elif "Opérateurs" in titre %}
+                    <pre><code class="language-python">a = 5 + 3
+b = 10 - 2
+c = 4 * 2
+d = 8 / 2
+print(a, b, c, d)</code></pre>
+                    {% elif "input" in titre %}
+                    <pre><code class="language-python">nom = input("Quel est ton nom ? ")
+print("Salut", nom)</code></pre>
+                    {% elif "if else" in titre %}
+                    <pre><code class="language-python">age = 15
+if age >= 18:
+    print("Majeur")
+else:
+    print("Mineur")</code></pre>
+                    {% elif "for loop" in titre %}
+                    <pre><code class="language-python">for i in range(5):
+    print("Coucou", i)</code></pre>
+                    {% elif "Listes" in titre %}
+                    <pre><code class="language-python">fruits = ["pomme", "banane", "cerise"]
+for fruit in fruits:
+    print(fruit)</code></pre>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

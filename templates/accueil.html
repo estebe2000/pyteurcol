@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="code-rain" id="code-rain"></div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 text-center">
+            <div class="code-animation-container mb-4">
+                <img src="{{ url_for('static', filename='pyteur.jpg') }}" alt="Logo" class="img-fluid logo-animated" style="max-width: 200px; border-radius: 10px;">
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <div class="terminal-button"></div>
+                        <div class="terminal-button"></div>
+                        <div class="terminal-button"></div>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-text">
+                            <span class="terminal-prompt">>>> </span>
+                            <span class="typing-text">print("DEMANDE À PYTEUR ET PROGRESSE EN PYTHON SANS STRESS")</span>
+                            <span class="cursor"></span>
+                        </div>
+                        <div class="terminal-output">DEMANDE À PYTEUR ET PROGRESSE EN PYTHON SANS STRESS</div>
+                    </div>
+                </div>
+            </div>
+            <h1 class="display-4 mb-4 text-primary">Python Fun - Apprends à coder en t'amusant !</h1>
+            <p class="lead mb-5">La plateforme ultra-cool pour découvrir Python avec Pyteur, ton coach perso ! Crée tes premiers programmes et deviens un super codeur 🚀</p>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-code-square text-primary" style="font-size: 3rem;"></i>
+                    <h3 class="card-title mt-3">Exercices</h3>
+                    <p class="card-text">Générez des exercices Python personnalisés adaptés à tous les niveaux (Troisième à Terminale). Exécutez, évaluez votre code et téléchargez en notebook Jupyter.</p>
+                    <a href="{{ url_for('exercices') }}" class="btn btn-primary mt-3">
+                        <i class="bi bi-code-square"></i> Accéder aux exercices
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-book text-success" style="font-size: 3rem;"></i>
+                    <h3 class="card-title mt-3">Cours</h3>
+                    <p class="card-text">Consultez les documents de cours dans une interface en style bibliothèque. Recherchez et filtrez facilement par nom ou par tags.</p>
+                    <a href="/apprendre" class="btn btn-success mt-3">
+                        <i class="bi bi-book"></i> Apprendre Python
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-success">
+                <div class="card-body text-center">
+                    <i class="bi bi-lightbulb-fill text-warning" style="font-size: 3rem;"></i>
+                    <h3 class="card-title mt-3">Nos Astuces Python</h3>
+                    <p class="card-text">
+                        - Un code propre est plus facile à comprendre<br>
+                        - Teste souvent ton programme<br>
+                        - Utilise des noms clairs pour tes variables<br>
+                        - Amuse-toi en codant !
+                    </p>
+                    <div class="alert alert-success mt-3">
+                        <i class="bi bi-stars"></i> Le but ? Apprendre Python en s'amusant !
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center mt-4">
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#helpModal">
+                <i class="bi bi-question-circle"></i> Consulter l'aide
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

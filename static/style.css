@@ -1,0 +1,877 @@
+/* Variables pour le thème clair (par défaut) */
+:root {
+    /* Couleurs flashy et fun */
+    --primary-color: #00aaff; /* bleu électrique */
+    --secondary-color: #8e44ad; /* violet */
+    --accent-color: #ff5733; /* orange vif */
+    --success-color: #2ecc71; /* vert */
+    --warning-color: #f1c40f; /* jaune */
+    --info-color: #00ffcc; /* vert fluo */
+    
+    /* Couleurs de thème */
+    --bg-color: #f0f8ff; /* bleu très clair */
+    --text-color: #222;
+    --card-bg: #ffffff;
+    --input-bg: #ffffff;
+    --input-text: #222;
+    --border-color: #ccc;
+    --code-bg: #1e1e2f;
+    --code-color: #f8f8f2;
+    --footer-bg: #e0e0e0;
+    --modal-bg: #ffffff;
+    --modal-text: #222;
+    --nav-bg: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    --nav-text: #ffffff;
+    --light-color: #ecf0f1;
+    --dark-color: #2c3e50;
+    
+    /* Effets */
+    --transition-speed: 0.3s;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Mode lecture facile (remplace le thème sombre) */
+[data-theme="dark"] {
+
+    --primary-color: #007acc;
+    --secondary-color: #005fa3;
+    --accent-color: #ff9900;
+    --success-color: #2ecc71;
+    --warning-color: #f1c40f;
+    --info-color: #00bfa5;
+
+    --bg-color: #f2f2f2;
+    --text-color: #111;
+    --card-bg: #f2f2f2;
+    --input-bg: #f2f2f2;
+    --input-text: #111;
+    --border-color: #888;
+    --code-bg: #f2f2f2;
+    --code-color: #111;
+    --footer-bg: #f2f2f2;
+    --modal-bg: #f2f2f2;
+    --modal-text: #111;
+    --nav-bg: #f2f2f2;
+    --nav-text: #111;
+    --light-color: #fdf6e3;
+    --dark-color: #111;
+
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
+    font-family: 'Arial', 'Verdana', sans-serif !important;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+/* Forcer texte navbar en mode lecture facile */
+[data-theme="dark"] .navbar,
+[data-theme="dark"] .navbar * {
+    color: #111 !important;
+}
+
+/* Styles généraux */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff8dc; /* beige clair */
+    color: var(--text-color);
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+/* Navbar verte dégradée */
+.navbar.bg-gradient {
+    background: linear-gradient(90deg, #7bed9f, #2ed573) !important;
+}
+
+/* Sections titre bleu vif */
+.card-header {
+    background-color: #007bff !important;
+    color: white !important;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+/* Cartes avec coins arrondis */
+.card {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* Boutons arrondis et colorés */
+.btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+/* Badge jaune pour modèle IA */
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all var(--transition-speed);
+}
+
+.navbar.bg-gradient {
+    background: var(--nav-bg) !important;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    transition: transform var(--transition-speed);
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.navbar-brand img {
+    transition: transform var(--transition-speed);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-brand:hover img {
+    transform: rotate(10deg);
+}
+
+.nav-link {
+    position: relative;
+    transition: all var(--transition-speed);
+    border-radius: 4px;
+    padding: 0.5rem 1rem !important;
+    margin: 0 0.2rem;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    transition: all var(--transition-speed);
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 80%;
+}
+
+/* Footer */
+.footer {
+    margin-top: 2rem;
+    padding: 1rem 0;
+    background-color: var(--footer-bg);
+    border-top: 1px solid var(--border-color);
+    color: var(--text-color);
+    transition: all var(--transition-speed);
+}
+
+.footer .badge {
+    transition: all var(--transition-speed);
+}
+
+.footer .badge:hover {
+    transform: scale(1.1);
+}
+
+/* Cartes */
+.card {
+    box-shadow: var(--box-shadow);
+    border: none;
+    margin-bottom: 1.5rem;
+    transition: all var(--transition-speed);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.card:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-5px);
+}
+
+.card-header {
+    font-weight: 600;
+    padding: 1rem 1.25rem;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-body {
+    background-color: var(--card-bg);
+}
+
+/* Animations pour les cartes */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Formulaire */
+.form-label {
+    font-weight: 500;
+    transition: all var(--transition-speed);
+    color: var(--text-color);
+}
+
+.form-select, .form-control {
+    transition: all var(--transition-speed);
+    border-radius: 0.375rem;
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border-color: var(--border-color);
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-color-rgb, 52, 152, 219), 0.25);
+    background-color: var(--input-bg);
+    color: var(--input-text);
+}
+
+.form-select:hover, .form-control:hover {
+    border-color: var(--primary-color);
+}
+
+.form-check-input {
+    background-color: var(--input-bg);
+    border-color: var(--border-color);
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Boutons */
+.btn {
+    transition: all var(--transition-speed);
+    border-radius: 0.375rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active::after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+/* Badges */
+.badge {
+    transition: all var(--transition-speed);
+    font-weight: 500;
+}
+
+/* Tooltips */
+.tooltip {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Modal */
+.modal-content {
+    border-radius: 0.5rem;
+    box-shadow: var(--hover-shadow);
+    background-color: var(--modal-bg);
+    color: var(--modal-text);
+    border-color: var(--border-color);
+}
+
+.modal-header {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-bottom-color: var(--border-color);
+}
+
+.modal-footer {
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    border-top-color: var(--border-color);
+}
+
+.modal-backdrop.show {
+    opacity: 0.7;
+}
+
+/* Accordion */
+.accordion-button {
+    transition: all var(--transition-speed);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: rgba(var(--primary-color-rgb, 52, 152, 219), 0.1);
+    color: var(--primary-color);
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-color-rgb, 52, 152, 219), 0.25);
+    border-color: var(--primary-color);
+}
+
+.accordion-item {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+.accordion-body {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+/* Styles pour l'énoncé et l'évaluation */
+#exercise-text, #evaluation-content {
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* Titres */
+#exercise-text h1, #evaluation-content h1 {
+    color: #007bff;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+#exercise-text h2, #evaluation-content h2 {
+    color: #0056b3;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+#exercise-text h3, #evaluation-content h3 {
+    color: #6c757d;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+/* Paragraphes */
+#exercise-text p, #evaluation-content p {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+/* Listes */
+#exercise-text ul, #evaluation-content ul {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+#exercise-text li, #evaluation-content li {
+    margin-bottom: 0.5rem;
+}
+
+/* Blocs de code */
+#exercise-text pre, #evaluation-content pre {
+    margin: 1.5rem 0;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    background-color: #282c34;
+    color: #f8f8f2;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+#exercise-text code, #evaluation-content code {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+/* Texte en gras et italique */
+#exercise-text strong, #evaluation-content strong {
+    font-weight: 600;
+}
+
+#exercise-text em, #evaluation-content em {
+    font-style: italic;
+}
+
+/* Messages de réussite/échec */
+.text-success {
+    color: #28a745 !important;
+    font-weight: 500;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+    font-weight: 500;
+}
+
+.text-info {
+    color: #17a2b8 !important;
+    font-weight: 500;
+}
+
+.text-primary {
+    color: #007bff !important;
+    font-weight: 500;
+}
+
+/* Éditeur de code */
+.CodeMirror {
+    height: auto;
+    min-height: 300px;
+    border-radius: 0.25rem;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Correction de l'alignement des numéros de ligne */
+.CodeMirror-linenumber {
+    padding: 0 8px 0 5px;
+    text-align: right;
+    width: 24px !important;
+}
+
+.CodeMirror-gutters {
+    border-right: 1px solid #ddd;
+    background-color: #1e1e1e;
+    padding-right: 5px;
+}
+
+.CodeMirror-gutter-wrapper {
+    left: -30px !important;
+}
+
+.CodeMirror-sizer {
+    margin-left: 40px !important;
+}
+
+/* Résultat d'exécution */
+#execution-output {
+    max-height: 300px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 14px;
+}
+
+/* Évaluation */
+#evaluation-content {
+    line-height: 1.6;
+}
+
+#evaluation-content h2 {
+    color: #17a2b8;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#evaluation-content h3 {
+    color: #6c757d;
+    margin-top: 1.2rem;
+    margin-bottom: 0.8rem;
+}
+
+#evaluation-content pre {
+    margin: 1rem 0;
+}
+
+#evaluation-content li {
+    margin-bottom: 0.5rem;
+}
+
+/* Styles pour le sélecteur de rôle */
+.role-selector {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    margin-left: 1rem;
+}
+
+.role-selector .btn {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.role-selector .btn-check:checked + .btn {
+    transform: scale(1.05);
+    font-weight: 500;
+}
+
+/* Styles pour la gestion des rôles */
+.admin-only, .teacher-only, .student-only {
+    display: none;
+}
+
+body.role-admin .admin-only {
+    display: block;
+}
+
+body.role-teacher .teacher-only,
+body.role-teacher .student-only {
+    display: block;
+}
+
+body.role-student .student-only {
+    display: block;
+}
+
+/* Pour les éléments inline ou flex */
+body.role-admin .admin-only.d-inline,
+body.role-teacher .teacher-only.d-inline,
+body.role-teacher .student-only.d-inline,
+body.role-student .student-only.d-inline {
+    display: inline !important;
+}
+
+body.role-admin .admin-only.d-flex,
+body.role-teacher .teacher-only.d-flex,
+body.role-teacher .student-only.d-flex,
+body.role-student .student-only.d-flex {
+    display: flex !important;
+}
+
+body.role-admin .admin-only.nav-item,
+body.role-teacher .teacher-only.nav-item,
+body.role-teacher .student-only.nav-item,
+body.role-student .student-only.nav-item {
+    display: list-item !important;
+}
+
+/* Styles pour le sélecteur de thème */
+.theme-switch-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.theme-switch {
+    display: inline-block;
+    height: 26px;
+    position: relative;
+    width: 50px;
+}
+
+.theme-switch input {
+    display: none;
+}
+
+.slider {
+    background-color: rgba(255, 255, 255, 0.2);
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 3px;
+    content: "";
+    height: 18px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 18px;
+}
+
+input:checked + .slider {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+.slider.round {
+    border-radius: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.slider .bi-sun-fill {
+    color: #fff;
+    font-size: 12px;
+    margin-right: 2px;
+}
+
+.slider .bi-moon-fill {
+    color: #fff;
+    font-size: 12px;
+    margin-left: 2px;
+}
+
+/* Styles pour le sélecteur de thème mobile */
+.form-switch .form-check-input {
+    width: 3em;
+    height: 1.5em;
+    margin-top: 0;
+}
+
+/* Animation du terminal et du code */
+.code-animation-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.logo-animated {
+    position: relative;
+    z-index: 2;
+    animation: float 6s ease-in-out infinite;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-10px) rotate(2deg);
+    }
+    50% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    75% {
+        transform: translateY(10px) rotate(-2deg);
+    }
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+}
+
+.terminal-window {
+    width: 90%;
+    max-width: 600px;
+    margin: 1rem auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-speed);
+}
+
+.terminal-header {
+    height: 30px;
+    background-color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.terminal-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+    background-color: #ff5f56;
+}
+
+.terminal-button:nth-child(2) {
+    background-color: #ffbd2e;
+}
+
+.terminal-button:nth-child(3) {
+    background-color: #27c93f;
+}
+
+.terminal-body {
+    background-color: var(--code-bg);
+    color: var(--code-color);
+    padding: 15px;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 14px;
+    min-height: 120px;
+}
+
+.terminal-text {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.terminal-prompt {
+    color: #4fa3e0;
+    margin-right: 8px;
+}
+
+.typing-text {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+    border-right: 2px solid transparent;
+}
+
+.cursor {
+    display: inline-block;
+    width: 10px;
+    height: 18px;
+    background-color: #fff;
+    animation: blink 1s step-end infinite;
+    margin-left: 2px;
+    vertical-align: middle;
+}
+
+.terminal-output {
+    color: #2ecc71;
+    margin-top: 10px;
+    opacity: 0;
+    animation: fadeIn 1s forwards 3s;
+}
+
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+@keyframes blink {
+    from, to { opacity: 0 }
+    50% { opacity: 1 }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
+
+/* Animation de code qui tombe */
+.code-rain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+    transition: opacity 1s ease-out;
+}
+
+.code-rain.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.code-drop {
+    position: absolute;
+    color: var(--primary-color);
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    opacity: 0.7;
+    animation: rain linear infinite;
+}
+
+@keyframes rain {
+    0% {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.7;
+    }
+    90% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(calc(100vh + 100px));
+        opacity: 0;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .col-md-4, .col-md-8 {
+        margin-bottom: 1.5rem;
+    }
+    
+    .role-selector {
+        margin: 0.5rem 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .terminal-window {
+        width: 95%;
+    }
+    
+    .terminal-body {
+        font-size: 12px;
+    }
+}
+
+/* Styles étoiles difficulté */
+#difficulty-stars {
+    font-size: 1.8rem;
+    color: #ccc;
+    cursor: pointer;
+}
+
+#difficulty-stars .star-icon {
+    transition: color 0.2s;
+    margin-right: 5px;
+}
+
+#difficulty-stars .star-icon:hover,
+#difficulty-stars .star-icon.hovered,
+#difficulty-stars .star-icon.selected {
+    color: #f1c40f;
+}

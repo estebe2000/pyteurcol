@@ -1,0 +1,214 @@
+{
+"Troisième": [
+    {
+      "thème": "Afficher des messages avec print",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier le code qui affiche Bonjour et remplacer Bonjour par votre prénom.",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Écrire une ligne de code qui affiche la phrase Jaime le Python.",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Écrire un code qui affiche votre nom sur une ligne et votre age juste le nombre sur la ligne suivante.",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Écrire une ligne de code qui affiche le résultat de l addition 15 plus 7.",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Écrire une seule ligne de code qui affiche Mon fruit préféré est suivi du nom de votre fruit préféré.",
+          "debutant": true
+        }
+      ]
+    },
+    {
+      "thème": "Garder des informations Variables",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier le code age reçoit 10 puis affiche age. Changer la valeur 10 par votre propre age.",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Créer une variable couleur contenant votre couleur préférée comme texte par exemple bleu et afficher le contenu de cette variable.",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Créer une variable animal pour votre animal préféré et une variable cri pour le son quil fait. Afficher ensuite le contenu des deux variables.",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Créer une variable score initialisée à 0. Lafficher. Ajouter 50 au score avec score reçoit score plus 50. Afficher le nouveau score.",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Créer une variable ville avec le nom de votre ville et une variable pays avec France. Afficher la phrase J habite a ville en pays en utilisant ces variables.",
+          "debutant": true
+        }
+      ]
+    },
+    {
+      "thème": "Faire des calculs simples Opérateurs",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier le code resultat reçoit 5 plus 3 puis affiche resultat. Remplacer l addition plus par une multiplication etoile.",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Écrire un code qui calcule 20 moins 8 et affiche le résultat directement avec la fonction print.",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Écrire un code qui calcule 50 divisé par 5 et affiche le résultat.",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Créer deux variables nombre1 reçoit 12 et nombre2 reçoit 4. Calculer et afficher leur produit multiplication.",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Créer deux variables note1 reçoit 15 et note2 reçoit 13. Calculer et afficher la moyenne de ces deux notes la somme divisée par 2.",
+          "debutant": true
+        }
+      ]
+    },
+    {
+      "thème": "Demander à l utilisateur avec input",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier le code nom reçoit input avec la question Ton nom puis affiche Salut suivi du nom. Changer la question Ton nom par Quel est ton sport prefere.",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Demander à l utilisateur son plat préféré avec input et afficher Miam jaime aussi suivi du plat préféré.",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Demander le prénom de l utilisateur puis son nom de famille avec deux input séparés. Afficher Bonjour prenom nom.",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Demander le nom de l utilisateur puis son age juste le nombre. Afficher nom a age ans Attention lage sera du texte.",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Demander à l utilisateur un pays quil aimerait visiter et afficher Jespere que tu iras bientot en suivi du pays.",
+          "debutant": true
+        }
+      ]
+    },
+    {
+      "thème": "Prendre des décisions if else",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier le code temperature reçoit 15 puis la condition if else qui affiche Il fait frais ou Il fait bon. Changer la valeur 15 par 25 et voir ce qui saffiche.",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Créer une variable nombre reçoit 7. Écrire une condition if pour afficher Positif si le nombre est supérieur à 0.",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Créer une variable note reçoit 12. Écrire une condition if else pour afficher Admis si la note est 10 ou plus sinon afficher Non admis.",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Demander un mot à l utilisateur avec input. Si le mot est exactement python en minuscules afficher Bravo sinon afficher Dommage.",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Créer une variable heure reçoit 14. Si lheure est avant 12 afficher Matin. Si lheure est 12 ou après afficher Apres-midi. Utiliser if else.",
+          "debutant": true
+        }
+      ]
+    },
+    {
+      "thème": "Répéter des actions for loop avec range",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier le code for i in range 3 qui affiche Ligne. Changer 3 pour que le mot Ligne saffiche 5 fois.",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Écrire une boucle for qui utilise range 10 pour afficher le mot Python 10 fois.",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Écrire une boucle for qui affiche les nombres de 0 à 4 utiliser range 5.",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Écrire une boucle for qui affiche les nombres de 1 à 5 utiliser range 1 virgule 6.",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Écrire une boucle for qui affiche la table de multiplication par 2 pour les nombres de 0 à 3 afficher 2 etoile 0 2 etoile 1 etc.",
+          "debutant": true
+        }
+      ]
+    },
+    {
+      "thème": "Ranger plusieurs choses Listes bases",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier la liste fruits contenant pomme banane puis le code qui affiche fruits index 0. Changer index 0 par index 1 pour afficher le deuxième fruit.",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Créer une liste couleurs avec trois couleurs de votre choix par exemple rouge vert bleu. Afficher la première couleur de la liste celle a l index 0.",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Créer une liste animaux contenant chien chat oiseau. Afficher le dernier animal de la liste celui a l index 2.",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Créer une liste jours avec Lundi Mardi Mercredi Jeudi. Afficher le premier jour index 0 ET le troisième jour index 2 de la liste sur des lignes séparées.",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Créer une liste hobbies avec sport musique lecture. Afficher la phrase Mon deuxieme hobby est suivi du deuxieme hobby de la liste.",
+          "debutant": true
+        }
+      ]
+    }
+  ]
+}

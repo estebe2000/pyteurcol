@@ -1,0 +1,214 @@
+{
+  "Troisième": [
+    {
+      "thème": "Afficher des messages (`print`)",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier `print(\"Bonjour\")` et remplacer \"Bonjour\" par votre prénom.",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Écrire une ligne de code qui affiche la phrase \"J'aime le Python !\".",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Écrire un code qui affiche votre nom sur une ligne, et votre âge (juste le nombre) sur la ligne suivante.",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Écrire une ligne de code qui affiche le résultat de l'addition 15 + 7.",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Écrire une seule ligne de code qui affiche \"Mon fruit préféré est : \" suivi du nom de votre fruit préféré.",
+          "debutant": true
+        }
+      ]
+    },
+    {
+      "thème": "Garder des informations (Variables)",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier `age = 10` puis `print(age)`. Changer la valeur 10 par votre propre âge.",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Créer une variable `couleur` contenant votre couleur préférée (comme texte, ex: \"bleu\") et afficher le contenu de cette variable.",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Créer une variable `animal` pour votre animal préféré et une variable `cri` pour le son qu'il fait. Afficher ensuite le contenu des deux variables.",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Créer une variable `score` initialisée à 0. L'afficher. Ajouter 50 au score (`score = score + 50`). Afficher le nouveau score.",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Créer une variable `ville` avec le nom de votre ville et une variable `pays` avec \"France\". Afficher la phrase \"J'habite à [ville] en [pays].\" en utilisant ces variables.",
+          "debutant": true
+        }
+      ]
+    },
+    {
+      "thème": "Faire des calculs simples (Opérateurs)",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier `resultat = 5 + 3` puis `print(resultat)`. Remplacer l'addition (+) par une multiplication (*).",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Écrire un code qui calcule 20 moins 8 et affiche le résultat directement avec `print()`.",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Écrire un code qui calcule 50 divisé par 5 et affiche le résultat.",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Créer deux variables `nombre1 = 12` et `nombre2 = 4`. Calculer et afficher leur produit (multiplication).",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Créer deux variables `note1 = 15` et `note2 = 13`. Calculer et afficher la moyenne de ces deux notes : (note1 + note2) / 2.",
+          "debutant": true
+        }
+      ]
+    },
+    {
+      "thème": "Demander à l'utilisateur (`input`)",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier `nom = input(\"Ton nom ? \")` puis `print(\"Salut\", nom)`. Changer la question \"Ton nom ?\" par \"Quel est ton sport préféré ?\".",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Demander à l'utilisateur son plat préféré avec `input()` et afficher \"Miam, j'aime aussi [plat préféré] !\".",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Demander le prénom de l'utilisateur, puis son nom de famille (avec deux `input()` séparés). Afficher \"Bonjour [prénom] [nom]\".",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Demander le nom de l'utilisateur, puis son âge (juste le nombre). Afficher \"[nom] a [âge] ans.\" (Attention, l'âge sera du texte).",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Demander à l'utilisateur un pays qu'il aimerait visiter et afficher \"J'espère que tu iras bientôt en [pays] !\"",
+          "debutant": true
+        }
+      ]
+    },
+    {
+      "thème": "Prendre des décisions (`if`/`else`)",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier `temperature = 15` puis `if temperature < 20: print(\"Il fait frais\") else: print(\"Il fait bon\")`. Changer la valeur `15` par `25` et voir ce qui s'affiche.",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Créer une variable `nombre = 7`. Écrire une condition `if` pour afficher \"Positif\" si le nombre est supérieur à 0.",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Créer une variable `note = 12`. Écrire une condition `if/else` pour afficher \"Admis\" si la note est 10 ou plus, sinon afficher \"Non admis\".",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Demander un mot à l'utilisateur avec `input()`. Si le mot est exactement \"python\" (en minuscules), afficher \"Bravo !\", sinon afficher \"Dommage.\"",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Créer une variable `heure = 14`. Si l'heure est avant 12, afficher \"Matin\". Si l'heure est 12 ou après, afficher \"Après-midi\". Utiliser `if/else`.",
+          "debutant": true
+        }
+      ]
+    },
+    {
+      "thème": "Répéter des actions (`for` loop avec `range`)",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier `for i in range(3): print(\"Ligne\")`. Changer `3` pour que le mot \"Ligne\" s'affiche 5 fois.",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Écrire une boucle `for` qui utilise `range(10)` pour afficher le mot \"Python\" 10 fois.",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Écrire une boucle `for` qui affiche les nombres de 0 à 4 (utiliser `range(5)`).",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Écrire une boucle `for` qui affiche les nombres de 1 à 5 (utiliser `range(1, 6)`).",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Écrire une boucle `for` qui affiche la table de multiplication par 2 pour les nombres de 0 à 3 (afficher 2*0, 2*1, 2*2, 2*3).",
+          "debutant": true
+        }
+      ]
+    },
+    {
+      "thème": "Ranger plusieurs choses (Listes - bases)",
+      "niveaux": [
+        {
+          "niveau": 1,
+          "description": "Recopier `fruits = [\"pomme\", \"banane\"]` puis `print(fruits[0])`. Changer `[0]` par `[1]` pour afficher le deuxième fruit.",
+          "debutant": true
+        },
+        {
+          "niveau": 2,
+          "description": "Créer une liste `couleurs` avec trois couleurs de votre choix (ex: `[\"rouge\", \"vert\", \"bleu\"]`). Afficher la première couleur de la liste (celle à l'index 0).",
+          "debutant": true
+        },
+        {
+          "niveau": 3,
+          "description": "Créer une liste `animaux` contenant \"chien\", \"chat\", \"oiseau\". Afficher le dernier animal de la liste (celui à l'index 2).",
+          "debutant": true
+        },
+        {
+          "niveau": 4,
+          "description": "Créer une liste `jours = [\"Lundi\", \"Mardi\", \"Mercredi\", \"Jeudi\"]`. Afficher le premier jour (index 0) ET le troisième jour (index 2) de la liste (sur des lignes séparées).",
+          "debutant": true
+        },
+        {
+          "niveau": 5,
+          "description": "Créer une liste `hobbies = [\"sport\", \"musique\", \"lecture\"]`. Afficher la phrase \"Mon deuxième hobby est : [deuxième hobby de la liste]\".",
+          "debutant": true
+        }
+      ]
+    }
+  ]
+}

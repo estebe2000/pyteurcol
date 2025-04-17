@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyteur</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+</head>
+<body class="role-admin">
+<nav class="navbar navbar-expand-lg navbar-dark bg-gradient shadow-sm">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="{{ url_for('static', filename='pyteur.jpg') }}" alt="Logo" width="40" height="40" class="d-inline-block align-text-top me-2 rounded-circle">
+            <span class="fw-bold">Pyteur</span>
+        </a>
+        
+        <!-- Sélecteur de thème -->
+        <div class="theme-switch-wrapper ms-3 d-none d-md-flex align-items-center">
+            <label class="theme-switch" for="theme-toggle">
+                <input type="checkbox" id="theme-toggle" />
+                <div class="slider round">
+                    <i class="bi bi-sun-fill"></i>
+                    <i class="bi bi-moon-fill"></i>
+                </div>
+            </label>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Sélecteur de thème pour mobile -->
+            <div class="d-md-none mb-3">
+                <div class="d-flex align-items-center justify-content-center">
+                    <span class="me-2 text-light"><i class="bi bi-sun-fill"></i></span>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="theme-toggle-mobile">
+                        <label class="form-check-label text-light" for="theme-toggle-mobile">Thème sombre</label>
+                    </div>
+                    <span class="ms-2 text-light"><i class="bi bi-moon-fill"></i></span>
+                </div>
+            </div>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Page d'accueil">
+                        <i class="bi bi-house-fill"></i> Accueil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/apprendre" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Découvrir et apprendre Python">
+                        <i class="bi bi-lightbulb"></i> Apprendre
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="practiceDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Pratique Python">
+                        <i class="bi bi-code-slash"></i> Pratique Python
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="practiceDropdown">
+                        <li>
+                            <a class="dropdown-item" href="/exercices">
+                                <i class="bi bi-code-square"></i> Exercices
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/sandbox">
+                                <i class="bi bi-terminal"></i> Bac à sable
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/defis">
+                                <i class="bi bi-trophy"></i> Défis
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% if session.get('role') == 'admin' %}
+                <!-- Menu Admin -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Fonctions d'administration">
+                        <i class="bi bi-shield-lock"></i> Admin
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
+                        <li>
+                            <a class="dropdown-item" href="/ged">
+                                <i class="bi bi-file-earmark-text"></i> GED
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/data-editor">
+                                <i class="bi bi-pencil-square"></i> Éditeur d'exercices
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/config">
+                                <i class="bi bi-gear-fill"></i> Configuration
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/qcm-generator">
+                                <i class="bi bi-question-circle"></i> Gestion QCM
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/admin/users">
+                                <i class="bi bi-people"></i> Gestion utilisateurs
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+                
+                {% if session.get('role') in ['admin', 'prof'] %}
+                <!-- Menu Professeur -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="teacherDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Fonctions enseignant">
+                        <i class="bi bi-person-workspace"></i> Professeur
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="teacherDropdown">
+                        <li>
+                            <a class="dropdown-item" href="/ged">
+                                <i class="bi bi-file-earmark-text"></i> GED
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/exercices">
+                                <i class="bi bi-list-check"></i> Créer des exercices
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/qcm-generator">
+                                <i class="bi bi-question-circle"></i> Gestion QCM
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#helpModal">
+                        <i class="bi bi-question-circle-fill"></i> Aide
+                    </a>
+                </li>
+
+                {% if session.get('user_id') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}" title="Déconnexion">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login') }}" title="Connexion">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer mt-5 py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted">
+                Générateur d'Exercices Python avec 
+                {% if ai_provider == 'gemini' %}
+                    <span class="badge bg-info">Google Gemini</span>
+                {% elif ai_provider == 'mistral' %}
+                    <span class="badge bg-warning">Mistral Codestral</span>
+                {% else %}
+                    <span class="badge bg-primary">LocalAI (Mistral)</span>
+                {% endif %}
+            </span>
+        </div>
+    </footer>
+
+    <!-- Modal de bienvenue -->
+    <div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="welcomeModalLabel">Bienvenue sur le Générateur d'Exercices Python</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="{{ url_for('static', filename='pyteur.jpg') }}" alt="Logo" class="img-fluid mb-4" style="max-width: 150px; border-radius: 10px;">
+<h4 class="mb-3">demande a pyteur</h4>
+                    <p class="lead">Cette application vous permet de :</p>
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="card h-100 border-primary mb-3">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-code-square text-primary" style="font-size: 2rem;"></i>
+                                    <h5 class="card-title mt-3">Générer des exercices</h5>
+                                    <p class="card-text">Créez des exercices Python personnalisés adaptés à votre niveau</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 border-success mb-3">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-play-circle text-success" style="font-size: 2rem;"></i>
+                                    <h5 class="card-title mt-3">Exécuter du code</h5>
+                                    <p class="card-text">Testez vos solutions directement dans l'application</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 border-info mb-3">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-check-circle text-info" style="font-size: 2rem;"></i>
+                                    <h5 class="card-title mt-3">Évaluer vos solutions</h5>
+                                    <p class="card-text">Recevez des commentaires détaillés sur votre code</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-check me-auto">
+                        <input class="form-check-input" type="checkbox" value="" id="dontShowAgain">
+                        <label class="form-check-label" for="dontShowAgain">
+                            Ne plus afficher ce message
+                        </label>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Commencer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal d'aide -->
+    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="helpModalLabel">Guide d'utilisation</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="accordion" id="helpAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <i class="bi bi-house-fill me-2"></i> Page d'accueil
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>La page d'accueil vous présente :</p>
+                                    <ul>
+                                        <li>Une vue d'ensemble des fonctionnalités de l'application</li>
+                                        <li>Des accès rapides aux différentes sections (Exercices, Cours, Administration)</li>
+                                        <li>Des informations sur l'application et son utilisation</li>
+                                    </ul>
+                                    <p>Vous pouvez naviguer vers les différentes sections en utilisant :</p>
+                                    <ul>
+                                        <li>Les cartes sur la page d'accueil</li>
+                                        <li>La barre de navigation en haut de la page</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <i class="bi bi-code-square me-2"></i> Générer un exercice
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>Pour générer un nouvel exercice :</p>
+                                    <ol>
+                                        <li>Accédez à l'onglet <strong>Exercices</strong> dans la barre de navigation</li>
+                                        <li>Sélectionnez un <strong>niveau</strong> (Troisième, SNT, Prépa NSI, Première ou Terminale)</li>
+                                        <li>Choisissez un <strong>thème</strong> parmi ceux disponibles</li>
+                                        <li>Définissez un <strong>niveau de difficulté</strong> (de 1 à 5)</li>
+                                        <li>Cliquez sur le bouton <strong>Générer l'exercice</strong></li>
+                                    </ol>
+                                    <p>L'IA va alors créer un énoncé personnalisé avec un squelette de code à compléter et des tests pour vérifier votre solution.</p>
+                                    <p><strong>Mode débutant :</strong> Les exercices marqués comme "débutant" (généralement Troisième, SNT et Prépa NSI) sont conçus sans fonctions ni classes, adaptés aux débutants en programmation.</p>
+                                    <p><strong>Télécharger en notebook Jupyter :</strong> Après avoir généré un exercice, vous pouvez cliquer sur le bouton <strong>Télécharger en notebook Jupyter</strong> pour obtenir l'exercice au format .ipynb, utilisable dans Jupyter Notebook ou JupyterLab.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    <i class="bi bi-3-circle-fill me-2"></i> Écrire et exécuter du code
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>Une fois l'exercice généré :</p>
+                                    <ol>
+                                        <li>Écrivez votre code dans l'<strong>éditeur de code</strong></li>
+                                        <li>Cliquez sur <strong>Exécuter le code</strong> pour voir le résultat</li>
+                                        <li>Le résultat s'affichera dans la section <strong>Résultat de l'exécution</strong></li>
+                                    </ol>
+                                    <p>L'éditeur de code dispose de la coloration syntaxique et de l'indentation automatique pour faciliter l'écriture du code.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    <i class="bi bi-4-circle-fill me-2"></i> Évaluer votre code
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>Pour obtenir une évaluation de votre code :</p>
+                                    <ol>
+                                        <li>Après avoir écrit votre solution, cliquez sur <strong>Évaluer le code</strong></li>
+                                        <li>L'IA analysera votre code et fournira des commentaires détaillés</li>
+                                        <li>L'évaluation inclut :</li>
+                                        <ul>
+                                            <li>Vérification de la conformité à l'énoncé</li>
+                                            <li>Identification des erreurs potentielles</li>
+                                            <li>Suggestions d'amélioration</li>
+                                            <li>Conseils pour aller plus loin</li>
+                                        </ul>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingGed">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGed" aria-expanded="false" aria-controls="collapseGed">
+                                    <i class="bi bi-file-earmark-text me-2"></i> Utiliser la GED
+                                </button>
+                            </h2>
+                            <div id="collapseGed" class="accordion-collapse collapse" aria-labelledby="headingGed" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>La Gestion Électronique de Documents (GED) vous permet de :</p>
+                                    <ol>
+                                        <li>Uploader des documents de différents formats</li>
+                                        <li>Organiser vos documents avec des tags</li>
+                                        <li>Rechercher des documents par nom ou par tag</li>
+                                        <li>Marquer des documents comme cours pour les afficher dans l'onglet Cours</li>
+                                    </ol>
+                                    <p>Pour ajouter un document :</p>
+                                    <ol>
+                                        <li>Cliquez sur <strong>Admin</strong> dans la barre de navigation</li>
+                                        <li>Sélectionnez <strong>GED</strong> dans le menu déroulant</li>
+                                        <li>Cliquez sur <strong>Ajouter un document</strong></li>
+                                        <li>Sélectionnez un fichier à uploader</li>
+                                        <li>Ajoutez des tags pour organiser votre document</li>
+                                        <li>Cliquez sur <strong>Enregistrer</strong></li>
+                                    </ol>
+                                    <p>Pour rechercher des documents :</p>
+                                    <ol>
+                                        <li>Utilisez la barre de recherche pour filtrer par nom</li>
+                                        <li>Cliquez sur un tag pour filtrer les documents par tag</li>
+                                    </ol>
+                                    <p>Pour modifier un document :</p>
+                                    <ol>
+                                        <li>Cliquez sur <strong>Modifier</strong> à côté du document</li>
+                                        <li>Modifiez le nom et/ou les tags</li>
+                                        <li>Cliquez sur <strong>Enregistrer</strong></li>
+                                    </ol>
+                                    <p>Pour marquer un document comme cours :</p>
+                                    <ol>
+                                        <li>Cliquez sur le bouton avec l'icône de livre <i class="bi bi-book"></i> à côté du document</li>
+                                        <li>Le bouton devient vert plein lorsque le document est marqué comme cours</li>
+                                        <li>Cliquez à nouveau pour retirer le document des cours</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingCours">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCours" aria-expanded="false" aria-controls="collapseCours">
+                                    <i class="bi bi-book me-2"></i> Bibliothèque de Cours
+                                </button>
+                            </h2>
+                            <div id="collapseCours" class="accordion-collapse collapse" aria-labelledby="headingCours" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>La Bibliothèque de Cours vous permet de :</p>
+                                    <ol>
+                                        <li>Consulter les documents marqués comme cours dans un style bibliothèque</li>
+                                        <li>Filtrer les cours par tags</li>
+                                        <li>Rechercher des cours par nom</li>
+                                    </ol>
+                                    <p>Pour consulter vos cours :</p>
+                                    <ol>
+                                        <li>Accédez à l'onglet <strong>Cours</strong> dans la barre de navigation</li>
+                                        <li>Les documents sont affichés sous forme de cartes avec leur nom, description et tags</li>
+                                        <li>Utilisez la barre de recherche pour filtrer par nom</li>
+                                        <li>Utilisez le sélecteur de tags pour filtrer par tag</li>
+                                        <li>Cliquez sur <strong>Consulter</strong> pour ouvrir un document</li>
+                                    </ol>
+                                    <p><strong>Note :</strong> Seuls les documents marqués comme cours dans l'onglet GED sont visibles dans la Bibliothèque de Cours.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFive">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                    <i class="bi bi-gear-fill me-2"></i> Changer de modèle d'IA
+                                </button>
+                            </h2>
+                            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>Vous pouvez choisir entre trois modèles d'IA :</p>
+                                    <ul>
+                                        <li><strong>LocalAI (Mistral)</strong> : Modèle hébergé localement sur votre machine, idéal pour une utilisation sans connexion internet</li>
+                                        <li><strong>Google Gemini</strong> : Modèle en ligne de Google, offrant d'excellentes performances pour la génération d'exercices</li>
+                                        <li><strong>Mistral (Codestral)</strong> : Modèle spécialisé pour le code via l'API Mistral, particulièrement efficace pour l'évaluation de code Python</li>
+                                    </ul>
+                                    <p>Pour changer de modèle :</p>
+                                    <ol>
+                                        <li>Cliquez sur <strong>Admin</strong> dans la barre de navigation</li>
+                                        <li>Sélectionnez <strong>Configuration</strong> dans le menu déroulant</li>
+                                        <li>Sélectionnez le modèle souhaité</li>
+                                        <li>Cliquez sur <strong>Enregistrer</strong></li>
+                                    </ol>
+                                    <p><strong>Note :</strong> Le modèle sélectionné est affiché en bas de page. Pour utiliser Gemini ou Mistral, vous devez configurer les clés API correspondantes dans le fichier .env.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingNotebook">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNotebook" aria-expanded="false" aria-controls="collapseNotebook">
+                                    <i class="bi bi-journal-code me-2"></i> Notebooks Jupyter
+                                </button>
+                            </h2>
+                            <div id="collapseNotebook" class="accordion-collapse collapse" aria-labelledby="headingNotebook" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>L'application vous permet de télécharger les exercices générés au format notebook Jupyter (.ipynb) :</p>
+                                    <ol>
+                                        <li>Après avoir généré un exercice, cliquez sur <strong>Télécharger en notebook Jupyter</strong></li>
+                                        <li>Donnez un titre à votre notebook</li>
+                                        <li>Cliquez sur <strong>Télécharger</strong></li>
+                                        <li>Le notebook sera téléchargé sur votre ordinateur</li>
+                                    </ol>
+                                    <p>Les notebooks générés contiennent :</p>
+                                    <ul>
+                                        <li>L'énoncé de l'exercice formaté en Markdown</li>
+                                        <li>Le squelette de code à compléter</li>
+                                        <li>Les tests pour vérifier votre solution</li>
+                                    </ul>
+                                    <p>Vous pouvez ouvrir ces notebooks avec Jupyter Notebook, JupyterLab, Google Colab, ou tout autre environnement compatible avec le format .ipynb.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingSandbox">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSandbox" aria-expanded="false" aria-controls="collapseSandbox">
+                                    <i class="bi bi-terminal me-2"></i> Bac à sable et modules scientifiques
+                                </button>
+                            </h2>
+                            <div id="collapseSandbox" class="accordion-collapse collapse" aria-labelledby="headingSandbox" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>Le bac à sable Python vous permet d'expérimenter librement avec du code Python :</p>
+                                    <ol>
+                                        <li>Accédez à l'onglet <strong>Bac à sable</strong> dans la barre de navigation</li>
+                                        <li>Écrivez votre code dans l'éditeur à gauche</li>
+                                        <li>Exécutez-le avec le bouton <strong>Exécuter le code</strong></li>
+                                        <li>Visualisez les résultats dans la console à droite</li>
+                                    </ol>
+                                    
+                                    <p><strong>Modules scientifiques et de traitement de texte préchargés :</strong></p>
+                                    <p>Le bac à sable inclut plusieurs bibliothèques préchargées que vous pouvez utiliser sans avoir à les importer explicitement :</p>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Calcul scientifique :</h6>
+                                            <ul>
+                                                <li><code>numpy</code> (alias <code>np</code>) - Calcul numérique</li>
+                                                <li><code>pandas</code> (alias <code>pd</code>) - Analyse de données</li>
+                                                <li><code>scipy</code> - Calcul scientifique avancé</li>
+                                                <li><code>sympy</code> (alias <code>sp</code>) - Calcul symbolique</li>
+                                                <li><code>matplotlib.pyplot</code> (alias <code>plt</code>) - Visualisation</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Traitement de texte :</h6>
+                                            <ul>
+                                                <li><code>re</code> - Expressions régulières</li>
+                                                <li><code>string</code> - Manipulation de chaînes</li>
+                                                <li><code>nltk</code> - Traitement du langage naturel</li>
+                                                <li><code>textblob</code> - Analyse de texte simplifiée</li>
+                                            </ul>
+                                            <h6>Bibliothèque standard :</h6>
+                                            <ul>
+                                                <li><code>math</code>, <code>random</code>, <code>statistics</code></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <p><strong>Exemple d'utilisation :</strong></p>
+                                    <pre><code>
+# Utilisation de numpy sans import
+arr = np.array([1, 2, 3, 4, 5])
+print(f"Moyenne : {np.mean(arr)}")
+print(f"Écart-type : {np.std(arr)}")
+
+# Utilisation de pandas sans import
+df = pd.DataFrame({
+    'A': [1, 2, 3],
+    'B': [4, 5, 6]
+})
+print(df)
+
+# Utilisation de matplotlib sans import
+x = np.linspace(0, 10, 100)
+y = np.sin(x)
+plt.plot(x, y)
+                                    </code></pre>
+                                    
+                                    <p><strong>Fonctionnalités supplémentaires :</strong></p>
+                                    <ul>
+                                        <li>Support de la fonction <code>input()</code> pour les exercices interactifs</li>
+                                        <li>Ouvrir un fichier Python existant avec le bouton <strong>Ouvrir</strong></li>
+                                        <li>Télécharger votre code en fichier .py avec le bouton <strong>Télécharger</strong></li>
+                                        <li>Effacer la sortie pour plus de clarté avec le bouton <strong>Effacer la sortie</strong></li>
+                                    </ul>
+                                    
+                                    <p><strong>Raccourcis clavier :</strong></p>
+                                    <ul>
+                                        <li>Ctrl+Enter : Exécuter le code</li>
+                                        <li>Ctrl+S : Télécharger le code</li>
+                                        <li>Ctrl+O : Ouvrir un fichier</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTheme">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTheme" aria-expanded="false" aria-controls="collapseTheme">
+                                    <i class="bi bi-palette me-2"></i> Thème clair/sombre
+                                </button>
+                            </h2>
+                            <div id="collapseTheme" class="accordion-collapse collapse" aria-labelledby="headingTheme" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>L'application propose un sélecteur de thème qui vous permet de basculer entre les modes clair et sombre :</p>
+                                    
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <div class="card h-100">
+                                                <div class="card-header bg-light">
+                                                    <i class="bi bi-sun-fill me-2"></i> Thème clair
+                                                </div>
+                                                <div class="card-body">
+                                                    <p>Le thème par défaut avec :</p>
+                                                    <ul>
+                                                        <li>Fond clair</li>
+                                                        <li>Texte foncé</li>
+                                                        <li>Contraste standard</li>
+                                                        <li>Idéal pour une utilisation en journée</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card h-100 bg-dark text-light">
+                                                <div class="card-header bg-dark text-light border-secondary">
+                                                    <i class="bi bi-moon-fill me-2"></i> Thème sombre
+                                                </div>
+                                                <div class="card-body">
+                                                    <p>Un thème alternatif avec :</p>
+                                                    <ul>
+                                                        <li>Fond sombre</li>
+                                                        <li>Texte clair</li>
+                                                        <li>Réduction de la fatigue oculaire</li>
+                                                        <li>Idéal pour une utilisation en soirée</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <p>Pour changer de thème :</p>
+                                    <ol>
+                                        <li>Cliquez sur le bouton de basculement de thème dans la barre de navigation</li>
+                                        <li>L'interface s'adapte automatiquement au thème sélectionné</li>
+                                        <li>Votre préférence est mémorisée entre les sessions</li>
+                                    </ol>
+                                    
+                                    <p><strong>Détection automatique :</strong> Si vous n'avez pas explicitement choisi de thème, l'application utilisera automatiquement le thème correspondant aux préférences de votre système d'exploitation.</p>
+                                    
+                                    <p><strong>Note :</strong> Le sélecteur de thème est disponible en haut de l'interface sur les grands écrans, et dans le menu déroulant sur les appareils mobiles.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingRoles">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRoles" aria-expanded="false" aria-controls="collapseRoles">
+                                    <i class="bi bi-people-fill me-2"></i> Sélecteur de rôle
+                                </button>
+                            </h2>
+                            <div id="collapseRoles" class="accordion-collapse collapse" aria-labelledby="headingRoles" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>L'application propose un sélecteur de rôle qui vous permet de basculer entre différentes vues :</p>
+                                    <div class="row mb-4">
+                                        <div class="col-md-4">
+                                            <div class="card h-100 border-danger">
+                                                <div class="card-header bg-danger text-white">
+                                                    <i class="bi bi-shield-lock me-2"></i> Vue Admin
+                                                </div>
+                                                <div class="card-body">
+                                                    <p>Accès complet à toutes les fonctionnalités :</p>
+                                                    <ul>
+                                                        <li>Toutes les fonctionnalités d'apprentissage</li>
+                                                        <li>Gestion Électronique de Documents (GED)</li>
+                                                        <li>Éditeur d'exercices</li>
+                                                        <li>Configuration du système</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card h-100 border-primary">
+                                                <div class="card-header bg-primary text-white">
+                                                    <i class="bi bi-person-workspace me-2"></i> Vue Professeur
+                                                </div>
+                                                <div class="card-body">
+                                                    <p>Accès aux fonctionnalités d'enseignement :</p>
+                                                    <ul>
+                                                        <li>Toutes les fonctionnalités d'apprentissage</li>
+                                                        <li>Gestion Électronique de Documents (GED)</li>
+                                                        <li>Création d'exercices</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card h-100 border-success">
+                                                <div class="card-header bg-success text-white">
+                                                    <i class="bi bi-mortarboard-fill me-2"></i> Vue Étudiant
+                                                </div>
+                                                <div class="card-body">
+                                                    <p>Accès aux fonctionnalités d'apprentissage :</p>
+                                                    <ul>
+                                                        <li>Exercices</li>
+                                                        <li>Cours</li>
+                                                        <li>Bac à sable Python</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <p>Pour changer de rôle :</p>
+                                    <ol>
+                                        <li>Cliquez sur l'un des boutons du sélecteur de rôle dans la barre de navigation</li>
+                                        <li>L'interface s'adapte automatiquement pour afficher les fonctionnalités correspondant au rôle sélectionné</li>
+                                        <li>Votre choix est mémorisé entre les sessions grâce au stockage local</li>
+                                    </ol>
+                                    
+                                    <p><strong>Note :</strong> Le sélecteur de rôle est disponible en haut de l'interface sur les grands écrans, et dans le menu déroulant sur les appareils mobiles.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingAdmin">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdmin" aria-expanded="false" aria-controls="collapseAdmin">
+                                    <i class="bi bi-shield-lock me-2"></i> Fonctions d'administration
+                                </button>
+                            </h2>
+                            <div id="collapseAdmin" class="accordion-collapse collapse" aria-labelledby="headingAdmin" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>Le menu Admin donne accès à plusieurs fonctions d'administration :</p>
+                                    <ul>
+                                        <li><strong>GED</strong> : Gestion Électronique de Documents pour uploader, organiser et gérer vos documents</li>
+                                        <li><strong>Éditeur d'exercices</strong> : Interface pour modifier le fichier data.json qui contient les définitions des exercices</li>
+                                        <li><strong>Configuration</strong> : Paramètres de l'application, notamment le choix du modèle d'IA</li>
+                                    </ul>
+                                    <p>L'éditeur d'exercices vous permet de :</p>
+                                    <ol>
+                                        <li>Ajouter de nouveaux niveaux scolaires</li>
+                                        <li>Ajouter de nouveaux thèmes à un niveau</li>
+                                        <li>Ajouter de nouveaux exercices avec différents niveaux de difficulté</li>
+                                        <li>Marquer des exercices comme "débutant" (sans fonctions ni classes)</li>
+                                        <li>Modifier les exercices existants</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    
+    <!-- Initialisation des tooltips et du modal de bienvenue -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser tous les tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Gestion du modal de bienvenue
+            const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
+            const dontShowAgainCheckbox = document.getElementById('dontShowAgain');
+            
+            // Désactivé - Ne plus afficher le modal de bienvenue
+            localStorage.setItem('hasSeenWelcome', 'true');
+            
+            // Réinitialiser le modal (pour les tests)
+            // Décommentez la ligne suivante pour réinitialiser le modal
+            // localStorage.removeItem('hasSeenWelcome');
+        });
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>
